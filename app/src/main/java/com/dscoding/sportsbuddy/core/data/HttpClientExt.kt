@@ -37,10 +37,10 @@ suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<
     }
 }
 
-fun constructRoute(route: String): String {
+fun constructUrl(url: String): String {
     return when {
-        route.contains(BuildConfig.BASE_URL) -> route
-        route.startsWith("/") -> BuildConfig.BASE_URL + route
-        else -> BuildConfig.BASE_URL + "/$route"
+        url.contains(BuildConfig.BASE_URL) -> url
+        url.startsWith("/") -> BuildConfig.BASE_URL + url
+        else -> BuildConfig.BASE_URL + "/$url"
     }
 }
