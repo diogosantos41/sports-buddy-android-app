@@ -3,7 +3,7 @@ package com.dscoding.sportsbuddy.sports.data.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
+@Serializable(with = SportsDtoSerializer::class)
 data class SportDto(
     @SerialName("i")
     val id: String,

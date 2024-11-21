@@ -69,6 +69,7 @@ dependencies {
     ksp(libs.google.dagger.hilt.compiler)
 
     implementation(libs.bundles.ktor)
+    implementation(libs.kotlinx.serialization.json)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
