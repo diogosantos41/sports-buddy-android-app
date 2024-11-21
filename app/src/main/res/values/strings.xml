@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Sports Buddy</string>
+    <string name="error_unknown">Unknown Error Occurred</string>
+</resources>
