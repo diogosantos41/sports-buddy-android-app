@@ -45,7 +45,8 @@ class SportEventsViewModel @Inject constructor(private val dataSource: SportsDat
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            sports = events
+                            sports = events,
+                            errorMessage = null
                         )
                     }
                 }

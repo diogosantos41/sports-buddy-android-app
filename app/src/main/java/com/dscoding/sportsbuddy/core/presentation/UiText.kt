@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.annotation.StringRes
 
 sealed interface UiText {
-    data class DynamicString(val value: String): UiText
+    data class DynamicString(val value: String) : UiText
     class StringResource(
         @StringRes val id: Int,
         val args: Array<Any> = arrayOf()
-    ): UiText
+    ) : UiText
 
     fun asString(context: Context): String {
         return when (this) {

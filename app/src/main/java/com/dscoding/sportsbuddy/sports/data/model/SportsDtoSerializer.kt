@@ -44,7 +44,7 @@ object SportsDtoSerializer : KSerializer<SportDto> {
                     name = if (element is JsonPrimitive && element.isString) {
                         element.content
                     } else {
-                        // If it's not a valid string, ignore it
+                        // If it's not a valid string, we can ignore it
                         null
                     }
                 }
@@ -60,7 +60,7 @@ object SportsDtoSerializer : KSerializer<SportDto> {
             }
         }
 
-        SportDto(
+        return@decodeStructure SportDto(
             id = id ?: INVALID_ID,
             name = name ?: "",
             events = events
