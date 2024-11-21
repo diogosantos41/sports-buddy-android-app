@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
 
-    implementation(libs.google.dagger.hilt)
+    implementation(libs.bundles.hilt)
     ksp(libs.google.dagger.hilt.compiler)
 
     implementation(libs.bundles.ktor)
