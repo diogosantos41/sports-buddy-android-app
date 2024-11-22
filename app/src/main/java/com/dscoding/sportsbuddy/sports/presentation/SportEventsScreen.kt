@@ -94,8 +94,14 @@ fun SportEventsScreen(state: SportEventsState, onAction: (SportEventsAction) -> 
                     items(items = state.sports, key = { it.id }) { sport ->
                         SportItem(
                             sport = sport,
-                            onToggleVisibility = {
-                                onAction(SportEventsAction.OnToggleSportVisibility(sport))
+                            onToggleExpandEvents = {
+                                onAction(SportEventsAction.OnToggleExpandEvents(sport.id))
+                            },
+                            onToggleFavoriteEvent = {
+                                onAction(SportEventsAction.OnToggleFavoriteEvent(it))
+                            },
+                            onToggleShowOnlyFavorites = {
+                                onAction(SportEventsAction.OnToggleShowOnlyFavorites(it))
                             },
                             modifier = Modifier
                                 .fillMaxWidth()

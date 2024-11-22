@@ -8,11 +8,13 @@ import java.time.ZonedDateTime
 data class SportUi(
     val id: String,
     val name: String,
+    val showOnlyFavoriteEvents: Boolean,
     val isExpanded: Boolean,
     @DrawableRes val iconRes: Int,
     val events: List<EventUi>
 ) {
     data class EventUi(
+        val id: String,
         val startTime: ZonedDateTime,
         val isFavorite: Boolean,
         val competitor1: String,
@@ -22,6 +24,7 @@ data class SportUi(
 
 fun Sport.Event.toEventUi(): SportUi.EventUi {
     return SportUi.EventUi(
+        id = id,
         startTime = startTime,
         isFavorite = false,
         competitor1 = competitors.splitCompetitors().first,
@@ -33,6 +36,7 @@ fun Sport.toSportUi(): SportUi {
     return SportUi(
         id = id,
         name = name.lowercase().replaceFirstChar { it.uppercase() },
+        showOnlyFavoriteEvents = false,
         isExpanded = true,
         iconRes = getDrawableIdForSport(id),
         events = events.map { it.toEventUi() }

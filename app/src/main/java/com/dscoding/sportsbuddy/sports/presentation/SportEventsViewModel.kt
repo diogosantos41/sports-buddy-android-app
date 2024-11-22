@@ -32,11 +32,11 @@ class SportEventsViewModel @Inject constructor(private val dataSource: SportsDat
     fun onAction(action: SportEventsAction) {
         when (action) {
             is SportEventsAction.OnToggleFavoriteEvent -> {}
-            is SportEventsAction.OnToggleSportVisibility -> {
+            is SportEventsAction.OnToggleExpandEvents -> {
                 _state.update { currentState ->
                     currentState.copy(
                         sports = currentState.sports.map { sport ->
-                            if (sport.id == action.sport.id) {
+                            if (sport.id == action.sportId) {
                                 sport.copy(isExpanded = !sport.isExpanded)
                             } else {
                                 sport
@@ -45,6 +45,8 @@ class SportEventsViewModel @Inject constructor(private val dataSource: SportsDat
                     )
                 }
             }
+
+            is SportEventsAction.OnToggleShowOnlyFavorites -> {}
         }
     }
 

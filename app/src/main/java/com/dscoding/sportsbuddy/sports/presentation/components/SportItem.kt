@@ -22,9 +22,13 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -36,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.sportsbuddy.R
 import com.dscoding.sportsbuddy.core.presentation.ui.theme.SbBlack
+import com.dscoding.sportsbuddy.core.presentation.ui.theme.SbDarkGrey
 import com.dscoding.sportsbuddy.core.presentation.ui.theme.SbWhite
 import com.dscoding.sportsbuddy.core.presentation.ui.theme.SportsBuddyTheme
 import com.dscoding.sportsbuddy.sports.presentation.model.SportUi
@@ -43,7 +48,9 @@ import com.dscoding.sportsbuddy.sports.presentation.model.SportUi
 @Composable
 fun SportItem(
     sport: SportUi,
-    onToggleVisibility: () -> Unit,
+    onToggleExpandEvents: () -> Unit,
+    onToggleFavoriteEvent: (eventId: String) -> Unit,
+    onToggleShowOnlyFavorites: (showOnlyFavorites: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -67,7 +74,25 @@ fun SportItem(
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.weight(1f)
             )
-            IconButton(onClick = onToggleVisibility) {
+            Switch(
+                checked = sport.showOnlyFavoriteEvents,
+                onCheckedChange = onToggleShowOnlyFavorites,
+                thumbContent = {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = SbWhite,
+                        modifier = Modifier.padding(2.dp)
+                    )
+                },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                    checkedTrackColor = SbDarkGrey,
+                    uncheckedThumbColor = SbDarkGrey.copy(alpha = 0.8f),
+                    uncheckedTrackColor = SbDarkGrey.copy(alpha = 0.6f)
+                )
+            )
+            IconButton(onClick = onToggleExpandEvents) {
                 Icon(
                     imageVector = if (sport.isExpanded) {
                         Icons.Default.KeyboardArrowUp
@@ -93,14 +118,17 @@ fun SportItem(
         ) {
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.Start,
+                maxItemsInEachRow = 4
             ) {
                 sport.events.forEach { event ->
                     EventItem(
                         event = event,
+                        onToggleFavoriteEvent = onToggleFavoriteEvent,
                         modifier = Modifier
-                            .widthIn(max = 80.dp)
-                            .heightIn(max = 80.dp)
+                            .widthIn(max = 100.dp)
+                            .heightIn(max = 250.dp)
+                            .padding(vertical = 20.dp, horizontal = 10.dp)
                     )
                 }
             }
@@ -116,11 +144,14 @@ private fun SportItemPreview() {
             sport = SportUi(
                 id = "0",
                 name = "Soccer",
+                showOnlyFavoriteEvents = false,
                 isExpanded = false,
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.soccer,
                 events = emptyList()
             ),
-            onToggleVisibility = {}
+            onToggleExpandEvents = {},
+            onToggleFavoriteEvent = {},
+            onToggleShowOnlyFavorites = {}
         )
     }
 }
