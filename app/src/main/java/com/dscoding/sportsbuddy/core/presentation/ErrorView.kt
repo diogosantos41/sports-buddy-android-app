@@ -19,14 +19,14 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ErrorView(errorMessage: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.background(MaterialTheme.colorScheme.secondary.copy(0.1f)),
+        modifier = modifier.background(MaterialTheme.colorScheme.error.copy(0.1f)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             imageVector = Icons.Default.ErrorOutline,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.secondary,
+            tint = MaterialTheme.colorScheme.error,
             modifier = Modifier.size(70.dp)
         )
         Spacer(modifier = Modifier.height(20.dp))

@@ -11,7 +11,7 @@ data class Sport(
     data class Event(
         val id: String,
         val sportId: String,
-        val name: String,
+        val competitors: String,
         val startTime: ZonedDateTime
     )
 }

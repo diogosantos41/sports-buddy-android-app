@@ -10,6 +10,7 @@ val DarkColorScheme = darkColorScheme(
     background = SbDarkGrey,
     onBackground = SbWhite,
     secondary = SbOrange,
+    error = SbErrorRed
 )
 
 @Composable

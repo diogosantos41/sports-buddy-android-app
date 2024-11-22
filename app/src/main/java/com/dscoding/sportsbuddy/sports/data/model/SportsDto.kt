@@ -19,7 +19,7 @@ data class SportDto(
         @SerialName("si")
         val sportId: String,
         @SerialName("d")
-        val name: String,
+        val competitors: String,
         @SerialName("tt")
         val startTime: Long
     )

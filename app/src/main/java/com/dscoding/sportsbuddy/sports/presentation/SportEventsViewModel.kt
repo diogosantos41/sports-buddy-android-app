@@ -6,6 +6,7 @@ import com.dscoding.sportsbuddy.core.domain.onError
 import com.dscoding.sportsbuddy.core.domain.onSuccess
 import com.dscoding.sportsbuddy.core.presentation.toUiText
 import com.dscoding.sportsbuddy.sports.domain.SportsDataSource
+import com.dscoding.sportsbuddy.sports.presentation.model.toSportUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,7 +32,19 @@ class SportEventsViewModel @Inject constructor(private val dataSource: SportsDat
     fun onAction(action: SportEventsAction) {
         when (action) {
             is SportEventsAction.OnToggleFavoriteEvent -> {}
-            is SportEventsAction.OnToggleSportVisibility -> {}
+            is SportEventsAction.OnToggleSportVisibility -> {
+                _state.update { currentState ->
+                    currentState.copy(
+                        sports = currentState.sports.map { sport ->
+                            if (sport.id == action.sport.id) {
+                                sport.copy(isExpanded = !sport.isExpanded)
+                            } else {
+                                sport
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 
@@ -41,11 +54,11 @@ class SportEventsViewModel @Inject constructor(private val dataSource: SportsDat
 
             dataSource
                 .getSports()
-                .onSuccess { events ->
+                .onSuccess { sports ->
                     _state.update {
                         it.copy(
                             isLoading = false,
-                            sports = events,
+                            sports = sports.map { it.toSportUi() },
                             errorMessage = null
                         )
                     }

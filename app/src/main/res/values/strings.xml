@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Sports Buddy</string>
 
+    <string name="versus">vs.</string>
+
     <string name="show_sport_events">Show %1$s events</string>
     <string name="hide_sport_events">Hide %1$s events</string>
 

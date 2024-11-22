@@ -5,14 +5,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.dscoding.sportsbuddy.sports.domain.Sport
+import androidx.compose.ui.res.stringResource
+import com.dscoding.sportsbuddy.R
+import com.dscoding.sportsbuddy.sports.presentation.model.SportUi
 
 @Composable
-fun EventItem(event: Sport.Event, modifier: Modifier = Modifier) {
+fun EventItem(event: SportUi.EventUi, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
-        Text(text = event.startTime.dayOfMonth.toString(), color = MaterialTheme.colorScheme.onBackground)
-        Text(text = "vs.", color = MaterialTheme.colorScheme.secondary)
-        Text(text = event.name, color = MaterialTheme.colorScheme.onBackground)
+        Text(text = event.competitor1, color = MaterialTheme.colorScheme.onBackground)
+        Text(text = stringResource(id = R.string.versus), color = MaterialTheme.colorScheme.secondary)
+        Text(text = event.competitor2, color = MaterialTheme.colorScheme.onBackground)
     }
 }
 

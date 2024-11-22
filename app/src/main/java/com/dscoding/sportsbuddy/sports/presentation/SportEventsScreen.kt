@@ -5,7 +5,6 @@ package com.dscoding.sportsbuddy.sports.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -94,7 +93,11 @@ fun SportEventsScreen(state: SportEventsState, onAction: (SportEventsAction) -> 
                 ) {
                     items(items = state.sports, key = { it.id }) { sport ->
                         SportItem(
-                            sport = sport, modifier = Modifier
+                            sport = sport,
+                            onToggleVisibility = {
+                                onAction(SportEventsAction.OnToggleSportVisibility(sport))
+                            },
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .animateItem()
                         )
