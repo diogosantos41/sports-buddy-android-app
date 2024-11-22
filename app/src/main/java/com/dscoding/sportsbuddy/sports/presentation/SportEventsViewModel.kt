@@ -7,7 +7,6 @@ import com.dscoding.sportsbuddy.core.domain.onSuccess
 import com.dscoding.sportsbuddy.core.presentation.toUiText
 import com.dscoding.sportsbuddy.sports.domain.FavoritesRepository
 import com.dscoding.sportsbuddy.sports.domain.SportsDataSource
-import com.dscoding.sportsbuddy.sports.presentation.model.SportUi
 import com.dscoding.sportsbuddy.sports.presentation.model.toSportUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +22,6 @@ class SportEventsViewModel @Inject constructor(
     private val dataSource: SportsDataSource,
     private val favoritesRepository: FavoritesRepository
 ) : ViewModel() {
-
-    private var unfilteredEventsList: List<SportUi.EventUi> = emptyList()
 
     private val _state = MutableStateFlow(SportEventsState())
     val state = _state
@@ -63,7 +60,7 @@ class SportEventsViewModel @Inject constructor(
                                 sport.copy(
                                     showOnlyFavoriteEvents = action.showOnlyFavorites,
                                     events = if (action.showOnlyFavorites) {
-                                        sport.events.filter { event -> event.isFavorite }
+                                        sport.favoriteEvents
                                     } else {
                                         sport.events
                                     }
@@ -92,7 +89,6 @@ class SportEventsViewModel @Inject constructor(
                             errorMessage = null
                         )
                     }
-                    unfilteredEventsList = sportsUi.flatMap { it.events }
                     observeFavorites()
                 }
                 .onError { error ->

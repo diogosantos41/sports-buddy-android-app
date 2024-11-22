@@ -18,7 +18,7 @@ import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,7 +45,7 @@ fun EventItem(
     modifier: Modifier = Modifier
 ) {
 
-    var remainingTime by rememberSaveable { mutableStateOf(calculateTimeRemaining(event.startTime)) }
+    var remainingTime by rememberSaveable { mutableLongStateOf(calculateTimeRemaining(event.startTime)) }
 
     LaunchedEffect(event.startTime) {
         while (remainingTime > 0) {

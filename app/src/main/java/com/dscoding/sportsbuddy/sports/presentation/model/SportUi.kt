@@ -13,6 +13,9 @@ data class SportUi(
     @DrawableRes val iconRes: Int,
     val events: List<EventUi>
 ) {
+
+    val favoriteEvents: List<EventUi> get() = events.filter { event -> event.isFavorite }
+
     data class EventUi(
         val id: String,
         val startTime: ZonedDateTime,

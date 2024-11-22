@@ -12,7 +12,7 @@ fun SportDto.EventDto.toEvent(): Sport.Event {
         sportId = sportId,
         competitors = competitors,
         startTime = Instant
-            .ofEpochMilli(startTime * 1000)
+            .ofEpochSecond(startTime)
             .atZone(ZoneId.of("UTC"))
     )
 }
