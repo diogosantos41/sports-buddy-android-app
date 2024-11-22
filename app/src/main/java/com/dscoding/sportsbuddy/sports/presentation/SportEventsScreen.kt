@@ -94,6 +94,9 @@ fun SportEventsScreen(state: SportEventsState, onAction: (SportEventsAction) -> 
                     items(items = state.sports, key = { it.id }) { sport ->
                         SportItem(
                             sport = sport,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
                             onToggleExpandEvents = {
                                 onAction(SportEventsAction.OnToggleExpandEvents(sport.id))
                             },
@@ -101,11 +104,8 @@ fun SportEventsScreen(state: SportEventsState, onAction: (SportEventsAction) -> 
                                 onAction(SportEventsAction.OnToggleFavoriteEvent(it))
                             },
                             onToggleShowOnlyFavorites = {
-                                onAction(SportEventsAction.OnToggleShowOnlyFavorites(it))
+                                onAction(SportEventsAction.OnChangeShowOnlyFavorites(sport.id, it))
                             },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItem()
                         )
                     }
                 }

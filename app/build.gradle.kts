@@ -71,6 +71,9 @@ dependencies {
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.datastore.core)
+    implementation(libs.datastore.preferences)
+
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     testImplementation(libs.junit)
