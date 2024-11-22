@@ -10,6 +10,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -18,7 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -27,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -116,20 +116,23 @@ fun SportItem(
             enter = fadeIn() + slideInVertically(),
             exit = fadeOut() + slideOutVertically()
         ) {
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-                maxItemsInEachRow = 4
-            ) {
-                sport.events.forEach { event ->
-                    EventItem(
-                        event = event,
-                        onToggleFavoriteEvent = onToggleFavoriteEvent,
-                        modifier = Modifier
-                            .widthIn(max = 100.dp)
-                            .heightIn(max = 250.dp)
-                            .padding(vertical = 20.dp, horizontal = 10.dp)
-                    )
+            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                val maxItemWidth = maxWidth / 3
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    maxItemsInEachRow = 3
+                ) {
+                    sport.events.forEach { event ->
+                        EventItem(
+                            event = event,
+                            onToggleFavoriteEvent = onToggleFavoriteEvent,
+                            modifier = Modifier
+                                .width(maxItemWidth)
+                                .heightIn(max = 250.dp)
+                                .padding(vertical = 20.dp, horizontal = 10.dp)
+                        )
+                    }
                 }
             }
         }

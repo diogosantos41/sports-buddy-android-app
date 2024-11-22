@@ -2,6 +2,7 @@
     <string name="app_name">Sports Buddy</string>
 
     <string name="versus">vs.</string>
+    <string name="finished">Finished</string>
 
     // Accessibility
     <string name="show_sport_events">Show %1$s events</string>
