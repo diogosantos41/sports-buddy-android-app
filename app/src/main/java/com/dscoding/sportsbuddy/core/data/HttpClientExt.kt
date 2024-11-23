@@ -19,8 +19,8 @@ suspend inline fun <reified T> safeCall(execute: () -> HttpResponse): Result<T, 
         e.printStackTrace()
         return Result.Error(DataError.SERIALIZATION)
     } catch (e: Exception) {
-        if (e is CancellationException) throw e
         e.printStackTrace()
+        if (e is CancellationException) throw e
         return Result.Error(DataError.UNKNOWN)
     }
 

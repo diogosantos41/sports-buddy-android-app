@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 
 fun calculateTimeRemaining(startTime: ZonedDateTime): Long {
     val currentTime = ZonedDateTime.now()
-    return Duration.between(currentTime, startTime).seconds
+    return maxOf(0, Duration.between(currentTime, startTime).seconds)
 }
 
 fun formatSecondsToDisplayDate(seconds: Long): String {

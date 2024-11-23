@@ -16,13 +16,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,13 +26,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.sportsbuddy.R
-import com.dscoding.sportsbuddy.core.presentation.calculateTimeRemaining
-import com.dscoding.sportsbuddy.core.presentation.formatSecondsToDisplayDate
+import com.dscoding.sportsbuddy.core.presentation.UiText
 import com.dscoding.sportsbuddy.core.presentation.ui.theme.SbYellow
 import com.dscoding.sportsbuddy.core.presentation.ui.theme.SportsBuddyTheme
+import com.dscoding.sportsbuddy.sports.presentation.model.DisplayableTime
 import com.dscoding.sportsbuddy.sports.presentation.model.SportUi
-import kotlinx.coroutines.delay
-import java.time.ZonedDateTime
 
 @Composable
 fun EventItem(
@@ -45,14 +39,7 @@ fun EventItem(
     modifier: Modifier = Modifier
 ) {
 
-    var remainingTime by rememberSaveable { mutableLongStateOf(calculateTimeRemaining(event.startTime)) }
-
-    LaunchedEffect(event.startTime) {
-        while (remainingTime > 0) {
-            delay(1000)
-            remainingTime = calculateTimeRemaining(event.startTime)
-        }
-    }
+    val context = LocalContext.current
 
     Column(
         modifier = modifier,
@@ -60,11 +47,7 @@ fun EventItem(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = if (formatSecondsToDisplayDate(remainingTime).contains("-")) {
-                stringResource(R.string.finished)
-            } else {
-                formatSecondsToDisplayDate(remainingTime)
-            },
+            text = event.remainingTime.remainingTimeToDisplay.asString(context),
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
@@ -122,7 +105,7 @@ fun EventItemPreview() {
     SportsBuddyTheme {
         EventItem(event = SportUi.EventUi(
             id = "0",
-            startTime = ZonedDateTime.now().plusHours(2),
+            remainingTime = DisplayableTime(0, UiText.DynamicString("10:30:45")),
             competitor1 = "Team 1",
             competitor2 = "Team 2",
             isFavorite = true,

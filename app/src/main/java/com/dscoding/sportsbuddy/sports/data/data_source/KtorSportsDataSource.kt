@@ -18,7 +18,7 @@ class KtorSportsDataSource(private val httpClient: HttpClient) : SportsDataSourc
     override suspend fun getSports(): Result<List<Sport>, DataError> {
         return safeCall<List<SportDto>> {
             httpClient.get(urlString = constructUrl("/sports"))
-        }.map { sportDtoList  ->
+        }.map { sportDtoList ->
             sportDtoList.filter { it.id != INVALID_ID }.map { it.toSport() }
         }
     }

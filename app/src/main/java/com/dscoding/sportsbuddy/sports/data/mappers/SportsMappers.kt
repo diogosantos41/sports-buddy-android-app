@@ -3,7 +3,7 @@ package com.dscoding.sportsbuddy.sports.data.mappers
 import com.dscoding.sportsbuddy.sports.data.model.SportDto
 import com.dscoding.sportsbuddy.sports.domain.Sport
 import java.time.Instant
-import java.time.ZoneId
+import java.time.ZoneOffset
 
 
 fun SportDto.EventDto.toEvent(): Sport.Event {
@@ -13,7 +13,7 @@ fun SportDto.EventDto.toEvent(): Sport.Event {
         competitors = competitors,
         startTime = Instant
             .ofEpochSecond(startTime)
-            .atZone(ZoneId.of("UTC"))
+            .atZone(ZoneOffset.UTC)
     )
 }
 

@@ -1,9 +1,11 @@
 package com.dscoding.sportsbuddy.sports.presentation.model
 
 import androidx.annotation.DrawableRes
+import com.dscoding.sportsbuddy.core.presentation.UiText
+import com.dscoding.sportsbuddy.core.presentation.calculateTimeRemaining
+import com.dscoding.sportsbuddy.core.presentation.formatSecondsToDisplayDate
 import com.dscoding.sportsbuddy.core.presentation.getDrawableIdForSport
 import com.dscoding.sportsbuddy.sports.domain.Sport
-import java.time.ZonedDateTime
 
 data class SportUi(
     val id: String,
@@ -18,17 +20,29 @@ data class SportUi(
 
     data class EventUi(
         val id: String,
-        val startTime: ZonedDateTime,
+        val remainingTime: DisplayableTime,
         val isFavorite: Boolean,
         val competitor1: String,
         val competitor2: String
     )
 }
 
+data class DisplayableTime(
+    val remainingTime: Long,
+    val remainingTimeToDisplay: UiText
+)
+
 fun Sport.Event.toEventUi(): SportUi.EventUi {
     return SportUi.EventUi(
         id = id,
-        startTime = startTime,
+        remainingTime = DisplayableTime(
+            remainingTime = calculateTimeRemaining(startTime),
+            remainingTimeToDisplay = UiText.DynamicString(
+                formatSecondsToDisplayDate(
+                    calculateTimeRemaining(startTime)
+                )
+            )
+        ),
         isFavorite = false,
         competitor1 = competitors.splitCompetitors().first,
         competitor2 = competitors.splitCompetitors().second,

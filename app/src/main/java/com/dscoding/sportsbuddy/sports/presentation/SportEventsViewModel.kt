@@ -6,11 +6,13 @@ import com.dscoding.sportsbuddy.R
 import com.dscoding.sportsbuddy.core.domain.onError
 import com.dscoding.sportsbuddy.core.domain.onSuccess
 import com.dscoding.sportsbuddy.core.presentation.UiText
+import com.dscoding.sportsbuddy.core.presentation.formatSecondsToDisplayDate
 import com.dscoding.sportsbuddy.core.presentation.toUiText
 import com.dscoding.sportsbuddy.sports.domain.FavoritesRepository
 import com.dscoding.sportsbuddy.sports.domain.SportsDataSource
 import com.dscoding.sportsbuddy.sports.presentation.model.toSportUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -96,6 +98,7 @@ class SportEventsViewModel @Inject constructor(
                             errorMessage = null
                         )
                     }
+                    startEventsCountdown()
                     observeFavorites()
                 }
                 .onError { error ->
@@ -137,6 +140,47 @@ class SportEventsViewModel @Inject constructor(
                         }
                     )
                 }
+            }
+        }
+    }
+
+    private fun startEventsCountdown() {
+        viewModelScope.launch {
+            while (true) {
+                val updatedSports = _state.value.sports.map { sport ->
+                    sport.copy(
+                        events = sport.events.map { event ->
+                            if (event.remainingTime.remainingTime <= 0) {
+                                event.copy(
+                                    remainingTime = event.remainingTime.copy(
+                                        remainingTime = 0,
+                                        remainingTimeToDisplay = UiText.StringResource(id = R.string.finished)
+                                    )
+                                )
+                            } else {
+                                val newRemainingTime = event.remainingTime.remainingTime - 1
+                                event.copy(
+                                    remainingTime = event.remainingTime.copy(
+                                        remainingTime = newRemainingTime.coerceAtLeast(0),
+                                        remainingTimeToDisplay = UiText.DynamicString(
+                                            formatSecondsToDisplayDate(newRemainingTime)
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                    )
+                }
+
+                _state.update { it.copy(sports = updatedSports) }
+
+                val allEventsFinished = updatedSports.all { sport ->
+                    sport.events.all { event -> event.remainingTime.remainingTime <= 0 }
+                }
+
+                if (allEventsFinished) break
+
+                delay(1000L)
             }
         }
     }
