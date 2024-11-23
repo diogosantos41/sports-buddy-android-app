@@ -3,6 +3,7 @@
 package com.dscoding.sportsbuddy.sports.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -10,6 +11,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -22,7 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,10 +33,13 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.sportsbuddy.R
@@ -93,12 +97,14 @@ fun SportItem(
                 )
             )
             IconButton(onClick = onToggleExpandEvents) {
+
+                val rotationAngle by animateFloatAsState(
+                    targetValue = if (sport.isExpanded) 180f else 0f,
+                    label = ""
+                )
+
                 Icon(
-                    imageVector = if (sport.isExpanded) {
-                        Icons.Default.KeyboardArrowUp
-                    } else {
-                        Icons.Default.KeyboardArrowDown
-                    },
+                    imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = if (sport.isExpanded) {
                         stringResource(id = R.string.show_sport_events, sport.name)
                     } else {
@@ -106,7 +112,8 @@ fun SportItem(
                     },
                     tint = SbBlack,
                     modifier = Modifier
-                        .size(30.dp)
+                        .graphicsLayer { rotationZ = rotationAngle }
+                        .size(40.dp)
                         .minimumInteractiveComponentSize()
                 )
             }
@@ -116,22 +123,41 @@ fun SportItem(
             enter = fadeIn() + slideInVertically(),
             exit = fadeOut() + slideOutVertically()
         ) {
-            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-                val maxItemWidth = maxWidth / 3
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    maxItemsInEachRow = 3
+            if (sport.events.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 4.dp, start = 12.dp, end = 12.dp),
                 ) {
-                    sport.events.forEach { event ->
-                        EventItem(
-                            event = event,
-                            onToggleFavoriteEvent = onToggleFavoriteEvent,
-                            modifier = Modifier
-                                .width(maxItemWidth)
-                                .heightIn(max = 250.dp)
-                                .padding(vertical = 20.dp, horizontal = 10.dp)
-                        )
+                    Text(
+                        text = stringResource(R.string.no_events, sport.name.lowercase()),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+            } else {
+                BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                    val maxItemWidth = maxWidth / 3
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        maxItemsInEachRow = 3
+                    ) {
+                        val eventsToDisplay =
+                            if (sport.showOnlyFavoriteEvents) sport.favoriteEvents
+                            else sport.events
+
+                        eventsToDisplay.forEach { event ->
+                            EventItem(
+                                event = event,
+                                onToggleFavoriteEvent = onToggleFavoriteEvent,
+                                modifier = Modifier
+                                    .width(maxItemWidth)
+                                    .heightIn(max = 250.dp)
+                                    .padding(vertical = 20.dp, horizontal = 10.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -147,8 +173,8 @@ private fun SportItemPreview() {
             sport = SportUi(
                 id = "0",
                 name = "Soccer",
-                showOnlyFavoriteEvents = false,
-                isExpanded = false,
+                showOnlyFavoriteEvents = true,
+                isExpanded = true,
                 iconRes = R.drawable.soccer,
                 events = emptyList()
             ),

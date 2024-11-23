@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Sports Buddy</string>
 
+    <string name="empty_list">There are no sport events to display</string>
+    <string name="no_events">There are no %1$s events to display</string>
     <string name="versus">vs.</string>
     <string name="finished">Finished</string>
 

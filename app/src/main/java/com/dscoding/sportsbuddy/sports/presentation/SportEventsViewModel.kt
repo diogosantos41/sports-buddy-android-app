@@ -2,8 +2,10 @@ package com.dscoding.sportsbuddy.sports.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dscoding.sportsbuddy.R
 import com.dscoding.sportsbuddy.core.domain.onError
 import com.dscoding.sportsbuddy.core.domain.onSuccess
+import com.dscoding.sportsbuddy.core.presentation.UiText
 import com.dscoding.sportsbuddy.core.presentation.toUiText
 import com.dscoding.sportsbuddy.sports.domain.FavoritesRepository
 import com.dscoding.sportsbuddy.sports.domain.SportsDataSource
@@ -59,11 +61,6 @@ class SportEventsViewModel @Inject constructor(
                             if (sport.id == action.sportId) {
                                 sport.copy(
                                     showOnlyFavoriteEvents = action.showOnlyFavorites,
-                                    events = if (action.showOnlyFavorites) {
-                                        sport.favoriteEvents
-                                    } else {
-                                        sport.events
-                                    }
                                 )
                             } else {
                                 sport
@@ -81,6 +78,16 @@ class SportEventsViewModel @Inject constructor(
             dataSource
                 .getSports()
                 .onSuccess { sports ->
+                    if (sports.isEmpty()) {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                sports = emptyList(),
+                                errorMessage = UiText.StringResource(id = R.string.empty_list)
+                            )
+                        }
+                        return@onSuccess
+                    }
                     val sportsUi = sports.map { it.toSportUi() }
                     _state.update {
                         it.copy(
