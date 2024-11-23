@@ -32,10 +32,10 @@ The main idea of this three-layer structure is to create a scalable, maintainabl
 
 ## Tech Stack
 
-- **UI**: Kotlin, Jetpack Compose
+- **UI**: Jetpack Compose
 - **Flows and Coroutines**: To handle the API calls and observe the favorite events.
 - **Data Store**: For storing the favorite event IDs.
-- **Dagger2/Hilt**: For a simple depedency injection implementation
+- **Dagger2/Hilt**: For a simple dependency injection implementation
 - **Ktor**: For remote API calls.
 
 ## Issues
